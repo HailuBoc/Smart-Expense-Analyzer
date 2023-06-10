@@ -9,10 +9,20 @@ from models import Base, Expense
 from schemas import ExpenseResponse, SummaryResponse, AnomalyResponse
 from anomaly_detector import detect_anomalies
 import os
+from dotenv import load_dotenv
 
-# Database setup
-DATABASE_URL = "sqlite:///./expenses.db"
-engine = create_engine(DATABASE_URL, connect_args={"check_same_thread": False})
+# Load environment variables
+load_dotenv()
+
+# Database setup - use psycopg3 driver
+DATABASE_URL = os.getenv("DATABASE_URL", "sqlite:///./expenses.db")
+# Convert psycopg2 URLs to psycopg3 if needed
+if DATABASE_URL.startswith("postgresql://"):
+    DATABASE_URL = DATABASE_URL.replace("postgresql://", "postgresql+psycopg://", 1)
+elif DATABASE_URL.startswith("postgres://"):
+    DATABASE_URL = DATABASE_URL.replace("postgres://", "postgresql+psycopg://", 1)
+
+engine = create_engine(DATABASE_URL, pool_pre_ping=True)
 SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
 
 # Create tables
@@ -143,4 +153,5 @@ async def health():
 
 if __name__ == "__main__":
     import uvicorn
-    uvicorn.run(app, host="0.0.0.0", port=8000)
+    port = int(os.getenv("API_PORT", 8000))
+    uvicorn.run(app, host="0.0.0.0", port=port)

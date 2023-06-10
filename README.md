@@ -90,13 +90,32 @@ date,category,amount,description
 
 ### Backend Setup
 
+1. Create and activate virtual environment:
 ```bash
 cd backend
+python -m venv venv
+.\venv\Scripts\Activate.ps1  # On Windows
+# or
+source venv/bin/activate     # On macOS/Linux
+```
+
+2. Install dependencies:
+```bash
 pip install -r requirements.txt
+```
+
+3. Run the backend:
+```bash
 python main.py
 ```
 
 The backend will run on `http://localhost:8000`
+
+**Note:** The backend supports both SQLite (default) and PostgreSQL. To use PostgreSQL, set the `DATABASE_URL` environment variable in `backend/.env`:
+
+```
+DATABASE_URL=postgresql+psycopg://username:password@localhost:5432/expenses_db
+```
 
 ### Frontend Setup
 

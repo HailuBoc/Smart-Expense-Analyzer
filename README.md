@@ -1,30 +1,32 @@
-# Smart Expense Analyzer Dashboard
+# 💰 Smart Expense Analyzer Dashboard
 
 A production-ready full-stack application for uploading, analyzing, and tracking expenses with AI-powered anomaly detection.
 
-## Overview
+## 🎯 Overview
 
-The Smart Expense Analyzer Dashboard is a web application that allows users to:
-- Upload expense data via CSV files
-- Visualize spending patterns with interactive charts
-- Detect anomalous expenses using statistical analysis
-- Track spending by category and time period
+The Smart Expense Analyzer Dashboard is a comprehensive web application that empowers users to:
+- 📤 Upload expense data via CSV files with validation
+- 📊 Visualize spending patterns with interactive charts
+- 🔍 Detect anomalous expenses using statistical analysis
+- 📈 Track spending by category and time period
+- 🎨 Experience a professional dark-themed UI
 
-## Tech Stack
+## 🛠️ Tech Stack
 
 **Backend:**
-- FastAPI 0.104.1
-- SQLAlchemy 2.0.23 (ORM)
-- SQLite (Database)
-- Pydantic 2.5.0 (Validation)
-- Python 3.8+
+- **FastAPI** 0.104.1 - Modern async web framework
+- **SQLAlchemy** 2.0.48 - Powerful ORM for database operations
+- **PostgreSQL/SQLite** - Flexible database support
+- **Pydantic** 2.12.5 - Data validation and serialization
+- **Psycopg3** - PostgreSQL adapter
+- **Python** 3.8+
 
 **Frontend:**
-- React 18.2.0
-- TypeScript 5.3.3
-- Vite 5.0.8
-- Axios 1.6.2
-- Recharts 2.10.3
+- **React** 18.2.0 - UI library
+- **TypeScript** 5.3.3 - Type-safe JavaScript
+- **Vite** 5.0.8 - Lightning-fast build tool
+- **Axios** 1.6.2 - HTTP client
+- **Recharts** 2.10.3 - Composable charting library
 
 ## Project Structure
 
@@ -50,19 +52,30 @@ smart-expense-analyzer/
 └── sample_expenses.csv         # Sample data for testing
 ```
 
-## Features
+## ✨ Features
 
-- **CSV Upload**: Drag-and-drop file upload with validation
-- **Database**: SQLite with automatic schema creation
-- **Anomaly Detection**: Statistical method to identify outliers
-- **Analytics Dashboard**: 
+### Core Functionality
+- **📁 CSV Upload**: Drag-and-drop file upload with comprehensive validation
+- **💾 Database**: SQLite (default) or PostgreSQL with automatic schema creation
+- **🔍 Anomaly Detection**: Statistical method (2σ) to identify unusual expenses
+- **📊 Analytics Dashboard**: 
   - Summary cards (total spending, categories, anomalies)
   - Pie chart for category breakdown
   - Line chart for time trends
-  - Anomalies table
-- **Responsive Design**: Mobile-friendly UI
-- **Error Handling**: Comprehensive validation and error messages
-- **Type Safety**: TypeScript on frontend, Pydantic on backend
+  - Detailed anomalies table
+  
+### User Experience
+- **🎨 Professional UI**: Dark-themed interface with cyan accents
+- **📱 Responsive Design**: Mobile-friendly layout
+- **⚡ Real-time Updates**: Instant dashboard refresh after upload
+- **🛡️ Error Handling**: Comprehensive validation and user-friendly error messages
+- **♿ Type Safety**: TypeScript on frontend, Pydantic on backend
+
+### Developer Experience
+- **🔧 Easy Setup**: One-command installation
+- **📚 Well-Documented**: Clear API documentation with Swagger UI
+- **🧪 Tested**: Comprehensive backend test suite
+- **🚀 Production-Ready**: CORS configured, environment variables supported
 
 ## API Endpoints
 

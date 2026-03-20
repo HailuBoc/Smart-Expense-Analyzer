@@ -86,8 +86,8 @@ export const UploadPage: React.FC<UploadPageProps> = ({ onUploadSuccess }) => {
       </div>
 
       {file && (
-        <div style={{ marginTop: '20px', padding: '15px', background: '#f0f0f0', borderRadius: '6px' }}>
-          <p style={{ marginBottom: '10px' }}>
+        <div style={{ marginTop: '20px', padding: '15px', background: '#1a1a1a', borderRadius: '6px', border: '1px solid #2a2a2a' }}>
+          <p style={{ marginBottom: '10px', color: '#ffffff' }}>
             <strong>Selected file:</strong> {file.name}
           </p>
           <button
@@ -100,9 +100,9 @@ export const UploadPage: React.FC<UploadPageProps> = ({ onUploadSuccess }) => {
         </div>
       )}
 
-      <div style={{ marginTop: '30px', padding: '20px', background: '#f9f9f9', borderRadius: '6px' }}>
-        <h3 style={{ marginBottom: '10px' }}>Sample CSV Format</h3>
-        <pre style={{ fontSize: '12px', overflow: 'auto' }}>
+      <div style={{ marginTop: '30px', padding: '20px', background: '#1a1a1a', borderRadius: '6px', border: '1px solid #2a2a2a' }}>
+        <h3 style={{ marginBottom: '10px', color: '#ffffff' }}>Sample CSV Format</h3>
+        <pre style={{ fontSize: '12px', overflow: 'auto', color: '#ffffff', background: '#0d0d0d', padding: '15px', borderRadius: '4px', border: '1px solid #2a2a2a' }}>
 {`date,category,amount,description
 2026-01-01,Food,25.5,Lunch
 2026-01-02,Transport,10,Taxi

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { UploadPage } from './components/UploadPage';
 import { DashboardPage } from './components/DashboardPage';
 import './index.css';

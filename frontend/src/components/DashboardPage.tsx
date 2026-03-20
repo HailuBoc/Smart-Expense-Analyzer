@@ -61,14 +61,14 @@ export const DashboardPage: React.FC<DashboardPageProps> = ({ refreshTrigger }) 
   // Prepare chart data
   const categoryData = Object.entries(summary.by_category).map(([name, value]) => ({
     name,
-    value: parseFloat(value.toFixed(2)),
+    value: parseFloat((value as number).toFixed(2)),
   }));
 
   const dateData = Object.entries(summary.by_date)
     .sort(([dateA], [dateB]) => dateA.localeCompare(dateB))
     .map(([date, amount]) => ({
       date: new Date(date).toLocaleDateString('en-US', { month: 'short', day: 'numeric' }),
-      amount: parseFloat(amount.toFixed(2)),
+      amount: parseFloat((amount as number).toFixed(2)),
     }));
 
   const COLORS = ['#667eea', '#764ba2', '#f093fb', '#4facfe', '#00f2fe', '#43e97b', '#fa709a', '#fee140'];
@@ -111,7 +111,7 @@ export const DashboardPage: React.FC<DashboardPageProps> = ({ refreshTrigger }) 
                   <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
                 ))}
               </Pie>
-              <Tooltip formatter={(value) => `$${value.toFixed(2)}`} />
+              <Tooltip formatter={(value) => `$${(value as number).toFixed(2)}`} />
             </PieChart>
           </ResponsiveContainer>
         </div>
@@ -125,7 +125,7 @@ export const DashboardPage: React.FC<DashboardPageProps> = ({ refreshTrigger }) 
               <CartesianGrid strokeDasharray="3 3" />
               <XAxis dataKey="date" />
               <YAxis />
-              <Tooltip formatter={(value) => `$${value.toFixed(2)}`} />
+              <Tooltip formatter={(value) => `$${(value as number).toFixed(2)}`} />
               <Legend />
               <Line
                 type="monotone"

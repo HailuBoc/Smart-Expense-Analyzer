@@ -1,0 +1,114 @@
+import React, { useState } from 'react';
+import { uploadCSV } from '../api';
+
+interface UploadPageProps {
+  onUploadSuccess: () => void;
+}
+
+export const UploadPage: React.FC<UploadPageProps> = ({ onUploadSuccess }) => {
+  const [file, setFile] = useState<File | null>(null);
+  const [loading, setLoading] = useState(false);
+  const [message, setMessage] = useState<{ type: 'success' | 'error'; text: string } | null>(null);
+
+  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const selectedFile = e.target.files?.[0];
+    if (selectedFile) {
+      setFile(selectedFile);
+      setMessage(null);
+    }
+  };
+
+  const handleDragOver = (e: React.DragEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+  };
+
+  const handleDrop = (e: React.DragEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+    const droppedFile = e.dataTransfer.files?.[0];
+    if (droppedFile && droppedFile.name.endsWith('.csv')) {
+      setFile(droppedFile);
+      setMessage(null);
+    } else {
+      setMessage({ type: 'error', text: 'Please drop a CSV file' });
+    }
+  };
+
+  const handleSubmit = async () => {
+    if (!file) {
+      setMessage({ type: 'error', text: 'Please select a file' });
+      return;
+    }
+
+    setLoading(true);
+    try {
+      const response = await uploadCSV(file);
+      setMessage({ type: 'success', text: response.data.message });
+      setFile(null);
+      setTimeout(() => onUploadSuccess(), 1500);
+    } catch (error: any) {
+      const errorMsg = error.response?.data?.detail || 'Upload failed';
+      setMessage({ type: 'error', text: typeof errorMsg === 'string' ? errorMsg : JSON.stringify(errorMsg) });
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  return (
+    <div className="upload-section">
+      <h2>Upload Expenses CSV</h2>
+      <p style={{ color: '#666', marginBottom: '20px', fontSize: '14px' }}>
+        Upload a CSV file with columns: date, category, amount, description
+      </p>
+
+      {message && (
+        <div className={`message ${message.type}`}>
+          {message.text}
+        </div>
+      )}
+
+      <div
+        className="upload-area"
+        onDragOver={handleDragOver}
+        onDrop={handleDrop}
+        onClick={() => document.getElementById('file-input')?.click()}
+      >
+        <div style={{ fontSize: '40px', marginBottom: '10px' }}>📁</div>
+        <p>Drag and drop your CSV file here</p>
+        <p style={{ fontSize: '12px', color: '#999' }}>or click to select</p>
+        <input
+          id="file-input"
+          type="file"
+          accept=".csv"
+          onChange={handleFileChange}
+        />
+      </div>
+
+      {file && (
+        <div style={{ marginTop: '20px', padding: '15px', background: '#f0f0f0', borderRadius: '6px' }}>
+          <p style={{ marginBottom: '10px' }}>
+            <strong>Selected file:</strong> {file.name}
+          </p>
+          <button
+            className="upload-btn"
+            onClick={handleSubmit}
+            disabled={loading}
+          >
+            {loading ? 'Uploading...' : 'Upload'}
+          </button>
+        </div>
+      )}
+
+      <div style={{ marginTop: '30px', padding: '20px', background: '#f9f9f9', borderRadius: '6px' }}>
+        <h3 style={{ marginBottom: '10px' }}>Sample CSV Format</h3>
+        <pre style={{ fontSize: '12px', overflow: 'auto' }}>
+{`date,category,amount,description
+2026-01-01,Food,25.5,Lunch
+2026-01-02,Transport,10,Taxi
+2026-01-03,Shopping,200,Shoes`}
+        </pre>
+      </div>
+    </div>
+  );
+};

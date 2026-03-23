@@ -84,3 +84,81 @@ For PostgreSQL, update `DATABASE_URL` in backend/.env:
 ```
 DATABASE_URL=postgresql+psycopg://username:password@host:5432/dbname
 ```
+
+## Anomaly Detection Approach
+
+The app uses a **statistical anomaly detection method** based on the 2-sigma rule:
+
+1. **Calculate Statistics**: Computes mean and standard deviation of all expense amounts
+2. **Set Threshold**: Threshold = Mean + (2 × Standard Deviation)
+3. **Flag Anomalies**: Any expense exceeding the threshold is marked as anomalous
+4. **Interpretation**: ~95% of normal expenses fall within this range, so flagged items are genuinely unusual
+
+**Why this approach?**
+- No external ML libraries needed (lightweight and fast)
+- Interpretable and explainable results
+- Works well with small to medium datasets
+- Automatically adapts to spending patterns
+
+**Example:**
+- Mean expense: $50
+- Std Dev: $20
+- Threshold: $50 + (2 × $20) = $90
+- Expenses > $90 are flagged as anomalies
+
+## Architecture & Data Flow
+
+```
+┌─────────────────────────────────────────────────────────────┐
+│                     USER BROWSER                             │
+│  ┌──────────────────────────────────────────────────────┐   │
+│  │  React Frontend (TypeScript + Vite)                  │   │
+│  │  - UploadPage: CSV file upload                       │   │
+│  │  - DashboardPage: Charts & anomalies display         │   │
+│  └──────────────────────────────────────────────────────┘   │
+└────────────────────────┬──────────────────────────────────────┘
+                         │ HTTP/REST (Axios)
+                         ▼
+┌─────────────────────────────────────────────────────────────┐
+│                   FASTAPI BACKEND                            │
+│  ┌──────────────────────────────────────────────────────┐   │
+│  │  API Endpoints:                                      │   │
+│  │  - POST /upload → Parse CSV & store expenses        │   │
+│  │  - GET /expenses → Retrieve all expenses            │   │
+│  │  - GET /summary → Aggregate spending data           │   │
+│  │  - GET /anomalies → Return flagged expenses         │   │
+│  └──────────────────────────────────────────────────────┘   │
+│  ┌──────────────────────────────────────────────────────┐   │
+│  │  Anomaly Detector (anomaly_detector.py):            │   │
+│  │  1. Fetch all expenses from DB                      │   │
+│  │  2. Calculate mean & std deviation                  │   │
+│  │  3. Set threshold = mean + (2 × std_dev)            │   │
+│  │  4. Mark expenses > threshold as anomalies          │   │
+│  │  5. Update is_anomaly flag in database              │   │
+│  └──────────────────────────────────────────────────────┘   │
+└────────────────────────┬──────────────────────────────────────┘
+                         │ SQLAlchemy ORM
+                         ▼
+┌─────────────────────────────────────────────────────────────┐
+│                    DATABASE                                  │
+│  ┌──────────────────────────────────────────────────────┐   │
+│  │  Expenses Table:                                     │   │
+│  │  - id (UUID)                                         │   │
+│  │  - date                                              │   │
+│  │  - category                                          │   │
+│  │  - amount                                            │   │
+│  │  - description                                       │   │
+│  │  - is_anomaly (boolean flag)                         │   │
+│  │                                                      │   │
+│  │  Supported: SQLite (dev) or PostgreSQL (prod)       │   │
+│  └──────────────────────────────────────────────────────┘   │
+└─────────────────────────────────────────────────────────────┘
+
+DATA FLOW:
+1. User uploads CSV file
+2. Backend parses and validates each row
+3. Expenses stored in database
+4. Anomaly detector runs automatically
+5. Frontend fetches summary, expenses, and anomalies
+6. Dashboard displays charts and flagged items
+```

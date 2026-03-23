@@ -20,14 +20,31 @@ export const DashboardPage: React.FC<DashboardPageProps> = ({ refreshTrigger }) 
     setLoading(true);
     setError(null);
     try {
+      console.log('Fetching dashboard data...');
       const [summaryData, anomaliesData] = await Promise.all([
         getSummary(),
         getAnomalies(),
       ]);
+      console.log('Dashboard data fetched successfully:', { summaryData, anomaliesData });
       setSummary(summaryData);
       setAnomalies(anomaliesData);
     } catch (err: any) {
-      setError(err.message || 'Failed to load dashboard');
+      console.error('Dashboard fetch error:', err);
+      
+      // Enhanced error message
+      let errorMsg = 'Failed to load dashboard';
+      
+      if (err.response?.status === 404) {
+        errorMsg = 'API endpoint not found. Check backend URL.';
+      } else if (err.response?.status === 500) {
+        errorMsg = 'Server error. Check backend logs.';
+      } else if (err.code === 'ERR_NETWORK') {
+        errorMsg = 'Network error: Cannot reach the server. Check your internet connection and backend URL.';
+      } else if (err.message) {
+        errorMsg = err.message;
+      }
+      
+      setError(errorMsg);
     } finally {
       setLoading(false);
     }
@@ -44,8 +61,20 @@ export const DashboardPage: React.FC<DashboardPageProps> = ({ refreshTrigger }) 
 
   if (error) {
     return (
-      <div className="message error">
-        {error}
+      <div style={{ padding: '20px' }}>
+        <div className="message error">
+          {error}
+        </div>
+        <button
+          className="upload-btn"
+          onClick={fetchData}
+          style={{ marginTop: '15px' }}
+        >
+          Retry
+        </button>
+        <p style={{ marginTop: '15px', color: '#999', fontSize: '12px' }}>
+          Debug info: Check browser console (F12) for more details.
+        </p>
       </div>
     );
   }

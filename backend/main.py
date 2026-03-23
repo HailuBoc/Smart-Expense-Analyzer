@@ -57,9 +57,15 @@ app = FastAPI(
 
 # Configure CORS (Cross-Origin Resource Sharing)
 # Allows frontend to make requests to this backend
+# In production, allow Vercel frontend domain
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["http://localhost:5173", "http://localhost:3000"],
+    allow_origins=[
+        "http://localhost:5173",      # Local development
+        "http://localhost:3000",      # Alternative local port
+        "https://smart-expense-analyzer.vercel.app",  # Production frontend
+        "*"  # Allow all origins in production (can be restricted later)
+    ],
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],

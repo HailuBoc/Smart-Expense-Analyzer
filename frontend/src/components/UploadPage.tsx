@@ -48,8 +48,28 @@ export const UploadPage: React.FC<UploadPageProps> = ({ onUploadSuccess }) => {
       setFile(null);
       setTimeout(() => onUploadSuccess(), 1500);
     } catch (error: any) {
-      const errorMsg = error.response?.data?.detail || 'Upload failed';
-      setMessage({ type: 'error', text: typeof errorMsg === 'string' ? errorMsg : JSON.stringify(errorMsg) });
+      // Enhanced error handling with detailed messages
+      let errorMsg = 'Upload failed';
+      
+      if (error.response?.data?.detail) {
+        const detail = error.response.data.detail;
+        if (typeof detail === 'string') {
+          errorMsg = detail;
+        } else if (detail.message) {
+          errorMsg = detail.message;
+        } else {
+          errorMsg = JSON.stringify(detail);
+        }
+      } else if (error.message) {
+        errorMsg = error.message;
+      } else if (error.code === 'ERR_NETWORK') {
+        errorMsg = 'Network error: Cannot reach the server. Check your internet connection and API URL.';
+      } else if (error.code === 'ECONNABORTED') {
+        errorMsg = 'Request timeout: Server took too long to respond.';
+      }
+      
+      console.error('Upload error:', error);
+      setMessage({ type: 'error', text: errorMsg });
     } finally {
       setLoading(false);
     }

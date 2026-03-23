@@ -1,92 +1,52 @@
-# 💰 Smart Expense Analyzer Dashboard
+# Smart Expense Analyzer
 
-A production-ready full-stack application for uploading, analyzing, and tracking expenses with AI-powered anomaly detection.
+A full-stack application for uploading, analyzing, and tracking expenses with automatic anomaly detection.
 
-## 🎯 Overview
+## Description
 
-The Smart Expense Analyzer Dashboard is a comprehensive web application that empowers users to:
-- 📤 Upload expense data via CSV files with validation
-- 📊 Visualize spending patterns with interactive charts
-- 🔍 Detect anomalous expenses using statistical analysis
-- 📈 Track spending by category and time period
-- 🎨 Experience a professional dark-themed UI
+Upload CSV files containing your expenses and get instant insights with interactive charts, spending breakdowns by category, time-based trends, and automatic detection of unusual expenses using statistical analysis.
 
-## 🛠️ Tech Stack
+## Features
 
-**Backend:**
-- **FastAPI** 0.104.1 - Modern async web framework
-- **SQLAlchemy** 2.0.48 - Powerful ORM for database operations
-- **PostgreSQL/SQLite** - Flexible database support
-- **Pydantic** 2.12.5 - Data validation and serialization
-- **Psycopg3** - PostgreSQL adapter
-- **Python** 3.8+
+- CSV file upload with validation
+- Interactive dashboard with charts (Pie & Line)
+- Automatic anomaly detection (2-sigma statistical method)
+- Spending breakdown by category and date
+- Professional dark-themed UI
+- Type-safe code (TypeScript + Pydantic)
 
-**Frontend:**
-- **React** 18.2.0 - UI library
-- **TypeScript** 5.3.3 - Type-safe JavaScript
-- **Vite** 5.0.8 - Lightning-fast build tool
-- **Axios** 1.6.2 - HTTP client
-- **Recharts** 2.10.3 - Composable charting library
+## Tech Stack
 
-## Project Structure
+**Backend:** FastAPI, SQLAlchemy, PostgreSQL/SQLite, Pydantic, Python 3.8+
 
-```
-smart-expense-analyzer/
-├── backend/
-│   ├── main.py                 # FastAPI application
-│   ├── models.py               # SQLAlchemy models
-│   ├── schemas.py              # Pydantic schemas
-│   ├── anomaly_detector.py     # Anomaly detection logic
-│   ├── requirements.txt        # Python dependencies
-│   └── .env                    # Environment config
-├── frontend/
-│   ├── src/
-│   │   ├── components/         # React components
-│   │   ├── api.ts              # Axios API client
-│   │   ├── App.tsx             # Main app component
-│   │   ├── main.tsx            # React entry point
-│   │   └── index.css           # Styles
-│   ├── package.json            # Node dependencies
-│   ├── vite.config.ts          # Vite configuration
-│   └── tsconfig.json           # TypeScript config
-└── sample_expenses.csv         # Sample data for testing
+**Frontend:** React 18, TypeScript, Vite, Axios, Recharts
+
+## Setup
+
+### Backend
+
+```bash
+cd backend
+python -m venv venv
+.\venv\Scripts\Activate.ps1  # Windows
+# or
+source venv/bin/activate     # macOS/Linux
+
+pip install -r requirements.txt
+python main.py
 ```
 
-## ✨ Features
+Backend runs on `http://localhost:8000`
 
-### Core Functionality
-- **📁 CSV Upload**: Drag-and-drop file upload with comprehensive validation
-- **💾 Database**: SQLite (default) or PostgreSQL with automatic schema creation
-- **🔍 Anomaly Detection**: Statistical method (2σ) to identify unusual expenses
-- **📊 Analytics Dashboard**: 
-  - Summary cards (total spending, categories, anomalies)
-  - Pie chart for category breakdown
-  - Line chart for time trends
-  - Detailed anomalies table
-  
-### User Experience
-- **🎨 Professional UI**: Dark-themed interface with cyan accents
-- **📱 Responsive Design**: Mobile-friendly layout
-- **⚡ Real-time Updates**: Instant dashboard refresh after upload
-- **🛡️ Error Handling**: Comprehensive validation and user-friendly error messages
-- **♿ Type Safety**: TypeScript on frontend, Pydantic on backend
+### Frontend
 
-### Developer Experience
-- **🔧 Easy Setup**: One-command installation
-- **📚 Well-Documented**: Clear API documentation with Swagger UI
-- **🧪 Tested**: Comprehensive backend test suite
-- **🚀 Production-Ready**: CORS configured, environment variables supported
+```bash
+cd frontend
+npm install
+npm run dev
+```
 
-## API Endpoints
-
-| Method | Endpoint | Description |
-|--------|----------|-------------|
-| POST | /upload | Upload CSV file |
-| GET | /expenses | Get all expenses |
-| GET | /summary | Get spending summary |
-| GET | /anomalies | Get detected anomalies |
-| GET | /health | Health check |
-| GET | /docs | Swagger API documentation |
+Frontend runs on `http://localhost:5173`
 
 ## CSV Format
 
@@ -99,74 +59,13 @@ date,category,amount,description
 2026-01-03,Shopping,200,Shoes
 ```
 
-## Installation & Setup
-
-### Backend Setup
-
-1. Create and activate virtual environment:
-```bash
-cd backend
-python -m venv venv
-.\venv\Scripts\Activate.ps1  # On Windows
-# or
-source venv/bin/activate     # On macOS/Linux
-```
-
-2. Install dependencies:
-```bash
-pip install -r requirements.txt
-```
-
-3. Run the backend:
-```bash
-python main.py
-```
-
-The backend will run on `http://localhost:8000`
-
-**Note:** The backend supports both SQLite (default) and PostgreSQL. To use PostgreSQL, set the `DATABASE_URL` environment variable in `backend/.env`:
-
-```
-DATABASE_URL=postgresql+psycopg://username:password@localhost:5432/expenses_db
-```
-
-### Frontend Setup
-
-```bash
-cd frontend
-npm install
-npm run dev
-```
-
-The frontend will run on `http://localhost:5173`
-
 ## Usage
 
-1. Start the backend server: `python main.py` (in backend folder)
-2. Start the frontend dev server: `npm run dev` (in frontend folder)
-3. Open http://localhost:5173 in your browser
-4. Upload `sample_expenses.csv` or your own CSV file
-5. View the dashboard with charts and analytics
-
-## Testing
-
-Run backend tests:
-
-```bash
-cd backend
-python test_backend.py
-```
-
-## Key Features
-
-✅ Drag-and-drop CSV upload
-✅ Automatic anomaly detection
-✅ Interactive charts (Pie & Line)
-✅ Category-based spending breakdown
-✅ Time-based trend analysis
-✅ Responsive design
-✅ Type-safe code (TypeScript + Pydantic)
-✅ Production-ready error handling
+1. Start backend: `python main.py` (in backend folder)
+2. Start frontend: `npm run dev` (in frontend folder)
+3. Open http://localhost:5173
+4. Upload a CSV file
+5. View analytics and anomalies on the dashboard
 
 ## Environment Variables
 
@@ -181,18 +80,7 @@ API_PORT=8000
 VITE_API_BASE_URL=http://localhost:8000
 ```
 
-## Production Build
-
-**Frontend:**
-```bash
-cd frontend
-npm run build
+For PostgreSQL, update `DATABASE_URL` in backend/.env:
 ```
-
-Output will be in `frontend/dist/`
-
-**Backend:**
-```bash
-pip install gunicorn
-gunicorn -w 4 -k uvicorn.workers.UvicornWorker main:app
+DATABASE_URL=postgresql+psycopg://username:password@host:5432/dbname
 ```

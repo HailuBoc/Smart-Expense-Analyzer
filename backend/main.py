@@ -264,7 +264,22 @@ if __name__ == "__main__":
     - Host: 0.0.0.0 (accessible from any network interface)
     - Port: Read from API_PORT environment variable (default: 8000)
     - Reload: Disabled in production
+    - Log level: Adjusted based on environment
     """
     import uvicorn
+    import os
+    
     port = int(os.getenv("API_PORT", 8000))
-    uvicorn.run(app, host="0.0.0.0", port=port)
+    environment = os.getenv("ENVIRONMENT", "development")
+    debug = environment == "development"
+    
+    # Use appropriate log level based on environment
+    log_level = "debug" if debug else "info"
+    
+    uvicorn.run(
+        app,
+        host="0.0.0.0",
+        port=port,
+        reload=debug,
+        log_level=log_level
+    )

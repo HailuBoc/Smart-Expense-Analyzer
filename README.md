@@ -48,6 +48,57 @@ npm run dev
 
 Frontend runs on `http://localhost:5173`
 
+### Docker Setup
+
+**Prerequisites:** Docker and Docker Compose installed
+
+**Option 1: Full Stack with Docker Compose (Recommended)**
+
+```bash
+# Create .env file for database configuration
+cat > .env << EOF
+DB_USER=postgres
+DB_PASSWORD=postgres
+DB_NAME=expenses_db
+EOF
+
+# Start all services (backend, frontend, PostgreSQL)
+docker-compose up -d
+
+# Access the app:
+# Frontend: http://localhost:5173
+# Backend API: http://localhost:8000
+# API Docs: http://localhost:8000/docs
+```
+
+**Option 2: Backend Only with Docker**
+
+```bash
+# Build the image
+docker build -t expense-analyzer .
+
+# Run with SQLite (development)
+docker run -p 8000:8000 expense-analyzer
+
+# Run with PostgreSQL (production)
+docker run -p 8000:8000 \
+  -e DATABASE_URL=postgresql+psycopg://user:password@host:5432/dbname \
+  expense-analyzer
+```
+
+**Stop Docker Services**
+
+```bash
+docker-compose down
+```
+
+**View Logs**
+
+```bash
+docker-compose logs -f backend
+docker-compose logs -f frontend
+```
+
 ## CSV Format
 
 Your CSV file must contain these columns:

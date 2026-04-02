@@ -273,7 +273,6 @@ if __name__ == "__main__":
     - Log level: Adjusted based on environment
     """
     import uvicorn
-    import os
     
     port = int(os.getenv("API_PORT", 8000))
     environment = os.getenv("ENVIRONMENT", "development")
@@ -283,7 +282,7 @@ if __name__ == "__main__":
     log_level = "debug" if debug else "info"
     
     uvicorn.run(
-        app,
+        "main:app",
         host="0.0.0.0",
         port=port,
         reload=debug,
